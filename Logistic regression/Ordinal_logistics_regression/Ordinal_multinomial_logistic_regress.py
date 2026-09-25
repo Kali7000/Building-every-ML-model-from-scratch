@@ -64,7 +64,7 @@ def build_confusion_matrix(actual_labels, predicted_labels):
 
 
 
-def train_model(train_wine_df, weights, thresholds, lr, epochs, l2_penalty = 0.01):  
+def train_model(train_wine_df, weights, thresholds, lr, epochs, l2_penalty = 0.001):  
     train_set_wine_matrix = train_wine_df.to_numpy() 
     for epoch in range(epochs):
         total_loss = 0
@@ -139,6 +139,7 @@ def test_model(test_wine_df, weights, thresholds):
     actual_labels = []
     predicted_labels = []
     correct_guesses = 0
+    close_guesses = 0
     
     for row in test_wine_matrix:
         features = row[:-1]
@@ -176,13 +177,23 @@ def test_model(test_wine_df, weights, thresholds):
         predicted_labels.append(predicted_label)
             
 
+        # 1. Count exact matches (Strict Accuracy)
         if predicted_label == actual_lable:
-                correct_guesses += 1
+            correct_guesses += 1
+            
+        # 2. Count matches that are off by 1 or less
+        # abs() gets the absolute value, so 5-6 and 6-5 both equal 1
+        distance = abs(predicted_label - actual_lable)
+        if distance <= 1:
+            close_guesses += 1
 
-
-    # Calculate simple accuracy
+    # Calculate Strict accuracy
     accuracy = correct_guesses / len(test_wine_df)
-    print(f"Overall Accuracy: {accuracy * 100:.2f}%")
+    print(f"Strict Accuracy: {accuracy * 100:.2f}%")
+    
+    # Calculate Off-by-One accuracy
+    close_accuracy = close_guesses / len(test_wine_df)
+    print(f"Off-by-One Accuracy: {close_accuracy * 100:.2f}%")
     
     return actual_labels, predicted_labels, correct_guesses
 
@@ -214,9 +225,9 @@ test_wine_df, stats = standardize(test_set, stats)
 
 weights = np.zeros(11)
 thresholds = [-4.0, -2.0, 0.0, 2.0, 4.0]
-lr = 0.05
-epochs = 2000
-lambda_val = 0.01
+lr = 0.0001
+epochs = 400
+lambda_val = 0.001
    
 weights, thresholds = train_model(train_wine_df, weights, thresholds, lr, epochs,lambda_val)
 
