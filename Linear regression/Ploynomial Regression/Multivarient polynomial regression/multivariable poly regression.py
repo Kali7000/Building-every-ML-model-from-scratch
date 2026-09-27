@@ -43,7 +43,8 @@ train_data = train_set.values.tolist()
 test_data = test_set.values.tolist()
 
 
-
+## numner of features = n - variables, d= degree of the polynomial, B = Binomial
+# numner =B((n+d)/d) - 1 
 
 # Initialize all weights to 0.0
 w0 = 0.0

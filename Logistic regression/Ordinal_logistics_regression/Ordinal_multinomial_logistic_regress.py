@@ -225,9 +225,9 @@ test_wine_df, stats = standardize(test_set, stats)
 
 weights = np.zeros(11)
 thresholds = [-4.0, -2.0, 0.0, 2.0, 4.0]
-lr = 0.0001
-epochs = 400
-lambda_val = 0.001
+lr = 0.00001
+epochs = 1000
+lambda_val = 0.0001
    
 weights, thresholds = train_model(train_wine_df, weights, thresholds, lr, epochs,lambda_val)
 
