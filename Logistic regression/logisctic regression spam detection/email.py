@@ -14,6 +14,7 @@ import numpy as np
 email_df = pd.read_csv("emails.csv")
 print(email_df.head())
 email_df = email_df.drop(columns =["Email No."])
+
 #sort the df columns
 email_df = email_df.sort_index(axis = 1)
 
